@@ -8,7 +8,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import br.edu.fatecfranca.api.dtos.CustomerRequest;
-import br.edu.fatecfranca.api.entities.Car;
 import br.edu.fatecfranca.api.entities.Customer;
 import br.edu.fatecfranca.api.repositories.CustomerRepository;
 
