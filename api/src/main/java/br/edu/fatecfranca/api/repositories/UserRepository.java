@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 
 import br.edu.fatecfranca.api.entities.User;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByUsernameOrEmail(String username, String email);
 }

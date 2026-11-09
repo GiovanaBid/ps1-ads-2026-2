@@ -11,6 +11,8 @@ import br.edu.fatecfranca.api.repositories.UserRepository;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import br.edu.fatecfranca.api.dtos.LoginRequest;
+
 @Service
 public class UserService {
 
@@ -31,6 +33,39 @@ public class UserService {
        user.setPassword(passwordEncoder.encode(request.password()));
         user.setIsAdmin(Boolean.TRUE.equals(request.isAdmin()));
     }
+
+    public Optional<User> authenticate(LoginRequest request) {
+        String usernameOrEmail = request.usernameOrEmail().strip();
+ 
+ 
+        Optional<User> result =
+                repository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail);
+ 
+ 
+        if (result.isEmpty()) {
+            return Optional.empty();
+        }
+ 
+ 
+        User user = result.get();
+ 
+ 
+        // Neste ponto ocorre a comparação entre os hashes da senha
+        // digitada e da senha cadastrada
+        boolean validPassword = passwordEncoder.matches(
+            request.password(),
+            user.getPassword()
+        );
+ 
+ 
+        if (!validPassword) {
+            return Optional.empty();
+        }
+ 
+ 
+        return Optional.of(user);
+    }
+ 
 
     public User create(UserRequest request) {
         User user = new User();

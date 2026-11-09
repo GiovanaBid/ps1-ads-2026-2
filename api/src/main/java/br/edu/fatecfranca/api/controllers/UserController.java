@@ -18,6 +18,12 @@ import br.edu.fatecfranca.api.entities.User;
 import br.edu.fatecfranca.api.services.UserService;
 import jakarta.validation.Valid;
 import br.edu.fatecfranca.api.dtos.UserResponse;
+import jakarta.validation.Valid;
+
+
+import br.edu.fatecfranca.api.dtos.LoginRequest;
+import br.edu.fatecfranca.api.dtos.UserResponse;
+
 
 @RestController
 @RequestMapping("/users")
@@ -28,6 +34,20 @@ public class UserController {
     public UserController(UserService service) {
         this.service = service;
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserResponse> login(
+            @Valid @RequestBody LoginRequest request) {
+ 
+ 
+        return service.authenticate(request)
+                .map(UserResponse::new)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity
+                        .status(HttpStatus.UNAUTHORIZED)
+                        .build());
+    }
+ 
 
     @PostMapping
     public ResponseEntity<UserResponse> create(
